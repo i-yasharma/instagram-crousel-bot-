@@ -45,7 +45,7 @@ Respond STRICTLY with valid JSON matching this structure:
             }
         });
         
-        const resultText = response.text();
+        const resultText = response.text;
         return JSON.parse(resultText);
     } catch (error) {
         console.error("Error generating content with Gemini:", error);
