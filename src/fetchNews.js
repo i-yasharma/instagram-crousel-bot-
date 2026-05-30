@@ -4,10 +4,12 @@ const path = require('path');
 
 const parser = new Parser();
 
-// Good sources for AI news
+// Good sources for AI, new tools, and startup news
 const RSS_FEEDS = [
     'https://techcrunch.com/category/artificial-intelligence/feed/',
-    'https://www.wired.com/feed/category/ai/latest/rss'
+    'https://www.wired.com/feed/category/ai/latest/rss',
+    'https://www.producthunt.com/feed',
+    'https://techcrunch.com/category/startups/feed/'
 ];
 
 async function fetchUnreadNews() {

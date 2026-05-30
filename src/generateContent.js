@@ -16,14 +16,18 @@ async function generateCarouselContent(newsItems) {
 
     // Send the top 15 newest items to Gemini so it has choices
     const prompt = `You are an expert Instagram content creator for a tech/AI page (@ya5h.ai).
-I have the following recent AI news items:
+I have the following recent tech, AI news, and new tool launch items:
 ${JSON.stringify(newsItems.slice(0, 15))}
 
-Task 1: Select the top 3 or 4 most exciting and important news items.
+Task 1: Select the top 3 or 4 most exciting and important updates. We focus on:
+- Cutting-edge AI developments and tool releases
+- Innovative software/tools for content creation, productivity, and design
+- Cool developer tools, build automation, and open-source releases
+
 Task 2: Format them into data for Instagram carousel slides.
-Slide 1 should be a hook/title slide (e.g., "Top AI News Today"). For slide 1, leave "content" empty.
-Slides 2 to N should each cover one of the selected news items. Give a short, punchy title and a 2-3 sentence engaging description for each.
-The "tag" should be a short 1-2 word badge (like "AI NEWS", "NEW TOOL", "UPDATE").
+Slide 1 should be a hook/title slide (e.g., "Trending AI & Tech Tools" or "Must-Try Tools This Week"). For slide 1, leave "content" empty.
+Slides 2 to N should each cover one of the selected tech updates or tools. Give a short, punchy title and a 2-3 sentence engaging description for each.
+The "tag" should be a short 1-2 word badge (like "AI TOOL", "CREATOR", "AUTOMATION", "AI NEWS", "UPDATE").
 Task 3: Write an engaging Instagram caption including emojis and relevant hashtags.
 
 Respond STRICTLY with valid JSON matching this structure:
@@ -31,8 +35,8 @@ Respond STRICTLY with valid JSON matching this structure:
   "caption": "Your highly engaging instagram caption here...",
   "selectedLinks": ["url1", "url2"],
   "slides": [
-    { "tag": "DAILY UPDATE", "title": "Top AI News You Missed", "content": "" },
-    { "tag": "OPENAI", "title": "GPT-5 is coming", "content": "The details..." }
+    { "tag": "DAILY UPDATE", "title": "Top Tech & AI Tools Today", "content": "" },
+    { "tag": "CREATOR", "title": "New Tool for Video Editing", "content": "The details..." }
   ]
 }`;
 
