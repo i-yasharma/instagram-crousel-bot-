@@ -12,6 +12,9 @@ permissions:
 jobs:
   post:
     runs-on: ubuntu-latest
+    env:
+      PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
+      PUPPETEER_EXECUTABLE_PATH: '/usr/bin/google-chrome-stable'
 
     steps:
     - name: Checkout Repository
@@ -24,11 +27,6 @@ jobs:
 
     - name: Install NPM dependencies
       run: npm install
-
-    - name: Install Headless Browser (Puppeteer) Dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y libnss3 libnspr4 libcups2 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 libasound2t64 || sudo apt-get install -y libnss3 libnspr4 libcups2 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 libasound2
 
     - name: Run Carousel Bot
       env:
