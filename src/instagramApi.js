@@ -37,34 +37,41 @@ async function postToInstagram(imagePaths, caption) {
         publicUrls.push(url);
     }
     
-    console.log("Creating Instagram Carousel Items...");
-    const creationIds = [];
-    for (const url of publicUrls) {
-        const response = await axios.post(`https://graph.facebook.com/v19.0/${igUserId}/media`, {
-            image_url: url,
-            is_carousel_item: true,
+    try {
+        console.log("Creating Instagram Carousel Items...");
+        const creationIds = [];
+        for (const url of publicUrls) {
+            const response = await axios.post(`https://graph.facebook.com/v19.0/${igUserId}/media`, {
+                image_url: url,
+                is_carousel_item: true,
+                access_token: accessToken
+            });
+            creationIds.push(response.data.id);
+        }
+        
+        console.log("Creating Carousel Container...");
+        const carouselResponse = await axios.post(`https://graph.facebook.com/v19.0/${igUserId}/media`, {
+            media_type: 'CAROUSEL',
+            children: creationIds,
+            caption: caption,
             access_token: accessToken
         });
-        creationIds.push(response.data.id);
+        
+        const carouselContainerId = carouselResponse.data.id;
+        
+        console.log("Publishing Carousel...");
+        const publishResponse = await axios.post(`https://graph.facebook.com/v19.0/${igUserId}/media_publish`, {
+            creation_id: carouselContainerId,
+            access_token: accessToken
+        });
+        
+        console.log("Successfully posted to Instagram! ID:", publishResponse.data.id);
+    } catch (error) {
+        if (error.response?.data) {
+            console.error("Meta Graph API Error Details:", JSON.stringify(error.response.data, null, 2));
+        }
+        throw error;
     }
-    
-    console.log("Creating Carousel Container...");
-    const carouselResponse = await axios.post(`https://graph.facebook.com/v19.0/${igUserId}/media`, {
-        media_type: 'CAROUSEL',
-        children: creationIds,
-        caption: caption,
-        access_token: accessToken
-    });
-    
-    const carouselContainerId = carouselResponse.data.id;
-    
-    console.log("Publishing Carousel...");
-    const publishResponse = await axios.post(`https://graph.facebook.com/v19.0/${igUserId}/media_publish`, {
-        creation_id: carouselContainerId,
-        access_token: accessToken
-    });
-    
-    console.log("Successfully posted to Instagram! ID:", publishResponse.data.id);
 }
 
 module.exports = { postToInstagram };
