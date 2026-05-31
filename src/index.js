@@ -40,4 +40,7 @@ async function main() {
     console.log("✅ All done for today! 🎉");
 }
 
-main().catch(console.error);
+main().catch(err => {
+    console.error("Fatal error running bot:", err);
+    process.exit(1);
+});
