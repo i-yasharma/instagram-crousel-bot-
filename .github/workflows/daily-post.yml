@@ -2,6 +2,8 @@ name: Daily Instagram AI Carousel
 
 on:
   schedule:
+    # Runs at 5:30 AM UTC daily (which is exactly 11:00 AM IST)
+    - cron: '30 5 * * *'
     # Runs at 10:30 AM UTC daily (which is exactly 4:00 PM IST)
     - cron: '30 10 * * *'
   workflow_dispatch: # Allows you to manually trigger it anytime from GitHub
