@@ -38,6 +38,7 @@ async function main() {
     fs.writeFileSync(historyPath, JSON.stringify(newHistory, null, 2));
 
     console.log("✅ All done for today! 🎉");
+    process.exit(0);
 }
 
 main().catch(err => {
