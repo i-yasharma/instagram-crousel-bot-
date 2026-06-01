@@ -14,21 +14,20 @@ async function generateCarouselContent(newsItems) {
 
     const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
-    // Send the top 15 newest items to Gemini so it has choices
-    const prompt = `You are an expert Instagram content creator for a tech/AI page (@ya5h.ai).
-I have the following recent tech, AI news, and new tool launch items:
+    const theme = process.env.POST_THEME || 'news';
+    let prompt = '';
+    
+    if (theme === 'tools') {
+        prompt = `You are an expert Instagram content creator for a tech/AI page (@ya5h.ai).
+I have the following recent new software and tool launch items:
 ${JSON.stringify(newsItems.slice(0, 15))}
 
-Task 1: Select the top 3 or 4 most exciting and important updates. We focus on:
-- Cutting-edge AI developments and tool releases
-- Innovative software/tools for content creation, productivity, and design
-- Cool developer tools, build automation, and open-source releases
-
+Task 1: Select the top 3 or 4 most exciting new AI tools, platforms, or content creator apps.
 Task 2: Format them into data for Instagram carousel slides.
-Slide 1 should be a hook/title slide (e.g., "Trending AI & Tech Tools" or "Must-Try Tools This Week"). For slide 1, leave "content" empty.
-Slides 2 to N should each cover one of the selected tech updates or tools. Give a short, punchy title and a 2-3 sentence engaging description for each.
-The "tag" should be a short 1-2 word badge (like "AI TOOL", "CREATOR", "AUTOMATION", "AI NEWS", "UPDATE").
-Task 3: Write an engaging Instagram caption including emojis and relevant hashtags.
+Slide 1 should be a hook/title slide (e.g., "Trending AI & Tech Tools" or "Must-Try Tools This Week" or "Game-Changing AI Tools"). For slide 1, leave "content" empty.
+Slides 2 to N should each cover one of the selected tools. Give a short, punchy title and a 2-3 sentence engaging description focusing on how it helps creators/builders.
+The "tag" should be a short 1-2 word badge (like "AI TOOL", "CREATOR", "AUTOMATION", "DESIGN", "UTILITY").
+Task 3: Write an engaging Instagram caption including emojis, how to try them, and relevant hashtags.
 
 Respond STRICTLY with valid JSON matching this structure:
 {
@@ -39,6 +38,28 @@ Respond STRICTLY with valid JSON matching this structure:
     { "tag": "CREATOR", "title": "New Tool for Video Editing", "content": "The details..." }
   ]
 }`;
+    } else {
+        prompt = `You are an expert Instagram content creator for a tech/AI page (@ya5h.ai).
+I have the following recent tech and AI news items:
+${JSON.stringify(newsItems.slice(0, 15))}
+
+Task 1: Select the top 3 or 4 most exciting and important tech and AI news updates or startup announcements.
+Task 2: Format them into data for Instagram carousel slides.
+Slide 1 should be a hook/title slide (e.g., "Top Tech & AI News Today" or "AI Updates You Missed"). For slide 1, leave "content" empty.
+Slides 2 to N should each cover one of the selected news stories. Give a short, punchy title and a 2-3 sentence engaging description summarizing what happened.
+The "tag" should be a short 1-2 word badge (like "AI NEWS", "TECH NEWS", "STARTUP", "UPDATE", "BREAKING").
+Task 3: Write an engaging Instagram caption including emojis, your analysis/thoughts, and relevant hashtags.
+
+Respond STRICTLY with valid JSON matching this structure:
+{
+  "caption": "Your highly engaging instagram caption here...",
+  "selectedLinks": ["url1", "url2"],
+  "slides": [
+    { "tag": "DAILY UPDATE", "title": "Top Tech & AI News Today", "content": "" },
+    { "tag": "AI NEWS", "title": "New Model Release", "content": "The details..." }
+  ]
+}`;
+    }
 
     try {
         const response = await ai.models.generateContent({

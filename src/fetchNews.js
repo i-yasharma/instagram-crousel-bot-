@@ -4,13 +4,19 @@ const path = require('path');
 
 const parser = new Parser();
 
-// Good sources for AI, new tools, and startup news
-const RSS_FEEDS = [
+const NEWS_FEEDS = [
     'https://techcrunch.com/category/artificial-intelligence/feed/',
     'https://www.wired.com/feed/category/ai/latest/rss',
-    'https://www.producthunt.com/feed',
     'https://techcrunch.com/category/startups/feed/'
 ];
+
+const TOOLS_FEEDS = [
+    'https://www.producthunt.com/feed'
+];
+
+// Dynamically select feeds based on theme
+const theme = process.env.POST_THEME || 'news';
+const RSS_FEEDS = theme === 'tools' ? TOOLS_FEEDS : NEWS_FEEDS;
 
 async function fetchUnreadNews() {
     const historyPath = path.join(__dirname, '../data/history.json');
