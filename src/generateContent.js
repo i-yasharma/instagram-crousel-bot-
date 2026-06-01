@@ -23,6 +23,7 @@ I have the following recent new software and tool launch items:
 ${JSON.stringify(newsItems.slice(0, 15))}
 
 Task 1: Select the top 3 or 4 most exciting new AI tools, platforms, or content creator apps.
+CRITICAL RULE: Do NOT select or write about image-generation, art-generation, or visual design tools that require showcasing a visual result or "image prompt" to be understood. Focus purely on software, utilities, video/audio editors, writing assistants, developer tools, and automation builders that can be described effectively with text alone.
 Task 2: Format them into data for Instagram carousel slides.
 Slide 1 should be a hook/title slide (e.g., "Trending AI & Tech Tools" or "Must-Try Tools This Week" or "Game-Changing AI Tools"). For slide 1, leave "content" empty.
 Slides 2 to N should each cover one of the selected tools. Give a short, punchy title and a 2-3 sentence engaging description focusing on how it helps creators/builders.
