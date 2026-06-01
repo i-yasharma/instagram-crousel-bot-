@@ -60,10 +60,27 @@ async function postToInstagram(imagePaths, caption) {
         const carouselContainerId = carouselResponse.data.id;
         
         console.log("Publishing Carousel...");
-        const publishResponse = await axios.post(`https://graph.facebook.com/v19.0/${igUserId}/media_publish`, {
-            creation_id: carouselContainerId,
-            access_token: accessToken
-        });
+        let publishResponse;
+        const maxRetries = 6;
+        const delayMs = 15000; // 15 seconds delay between retries
+        
+        for (let attempt = 1; attempt <= maxRetries; attempt++) {
+            try {
+                publishResponse = await axios.post(`https://graph.facebook.com/v19.0/${igUserId}/media_publish`, {
+                    creation_id: carouselContainerId,
+                    access_token: accessToken
+                });
+                break; // Success! Exit the loop.
+            } catch (error) {
+                const isNotReady = error.response?.data?.error?.error_subcode === 2207027 || error.response?.data?.error?.message?.includes("not ready");
+                if (isNotReady && attempt < maxRetries) {
+                    console.log(`[Attempt ${attempt}/${maxRetries}] Carousel is not ready to be published yet. Waiting 15s to retry...`);
+                    await new Promise(resolve => setTimeout(resolve, delayMs));
+                } else {
+                    throw error; // Rethrow if it's a different error or we ran out of retries
+                }
+            }
+        }
         
         console.log("Successfully posted to Instagram! ID:", publishResponse.data.id);
     } catch (error) {
